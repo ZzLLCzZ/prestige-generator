@@ -16,8 +16,8 @@ class Data:
         self.progress = self.current / BigNumber(self.goal)
         if self.level >= 15.0:
             self.progress = BigNumber(1)
-        self.prestige_currency = self.p_currency
-        self.up_points = "UP:" + self.upgrade_points
+        self.prestige_currency = str(self.p_currency)
+        self.up_points = "UP:" + str(self.upgrade_points)
 
 
 def onLoad():
