@@ -76,7 +76,7 @@ END special functions
 """
 
 def upgradeClick(data):
-    data.goal /= 1.1
+    data.goal /= 1.024
     if data.goal <= 1:
         data.goal = 1
     data.level += 1
