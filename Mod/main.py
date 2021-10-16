@@ -3,118 +3,85 @@ import SeededRand
 import GameController
 
 class Data:
-    """
-    This is a class for storing data, this is required
-
-    Attributes:
-        id (int): the id of the module
-    """
     def __init__(self, id):
-        """
-        The constructor for the Data class
-        Parameters:
-            id (int): the id
-        """
         self.id = id
+        self.level = 0
+        self.current = BigNumber(0)
+        self.goal = 1000.0
+        self.progress = BigNumber(0)
+        self.p_currency = BigNumber(0)
+        self.upgrade_points = BigNumber(0)
+
+    def updateProgress(self):
+        self.progress = self.current / BigNumber(self.goal)
+        if self.level >= 15.0:
+            self.progress = BigNumber(1)
+        self.prestige_currency = self.p_currency
+        self.up_points = "UP:" + self.upgrade_points
+
 
 def onLoad():
-    """
-    loads the mod, only ran when the game is started
-    """
     return  "Success Loading"
 
 def onUnload():
-    """
-    unloads the mod, only ran when the home button is pressed
-    """
     return "Success Unloading"
 
 def createModule(id):
-    """
-    creates a module
-
-    Parameters:
-        id (int): the id
-
-    Returns:
-        data: the new data variable
-    """
     data = Data(id)
     data.result = "Created Template"
+
     return data
 
 def tick(data):
-    """
-    processes one tick
+    data.current += BigNumber(1) 
+    data.updateProgress()
 
-    Parameters:
-        data (Data): the data variable
-
-    Returns:
-        data: the new data variable
-    """
     return data
 
 def bulkTick(data, amount):
-    """
-    processes multiple ticks
+    data.current += amount
+    while data.current > BigNumber(data.goal):
+        data.p_currency += BigNumber(data.level)
+        data.current -= BigNumber(data.goal)
+    data.updateProgress()
 
-    Parameters:
-        data (Data): the data variable
-        amount (BigNumber): the amount of ticks to run
-
-    Returns:
-        data: the new data variable
-    """
     return data
 
 def destroyModule(data):
-    """
-    destroys the module currently not run
-
-    Parameters:
-        data (Data): the data variable
-
-    Returns:
-        data: the new data variable
-    """
     return data
 
 def onPrestige(data):
-    """
-    processes prestige
+    data.upgrade_points += BigNumber(1)
 
-    Parameters:
-        data (Data): the data variable
-
-    Returns:
-        data: the new data variable
-    """
     return data
 
 def loadSave(save, id):
-    """
-    loads a save
-
-    Parameters:
-        save (string): the save Data
-        id (int): the id of the module
-
-    Returns:
-        data: the new data variable
-    """
     data = createModule(id)
+    data.level = int(save.split(",")[0])
+    data.goal = float(save.split(",")[1])
+    data.p_currency = int(save.split(",")[2])
+
     return data
 
 def saveData(data):
-    """
-    gets save data
-
-    Parameters:
-        data (Data): the data variable
-
-    Returns:
-        string: the save Data
-    """
     result = ""
+    result += str(data.level) + ","
+    result += str(data.goal) + ","
+    result += str(data.p_currency)
+
     return result
+
+"""
+END special functions
+"""
+
+def upgradeClick(data):
+    data.goal /= 1.1
+    if data.goal <= 1:
+        data.goal = 1
+    data.level += 1
+
+    return data
+
+def upgradeAvail(data):
+    return data.upgrade_points > BigNumber(0)
