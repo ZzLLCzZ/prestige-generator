@@ -1,8 +1,8 @@
 {
-  "name": "Template Mod Does nothing",
-  "description": "An empty template",
+  "name": "prestige generator",
+  "description": "Generates prestige currency",
   "main_file": "main.py",
   "ui_file": "ui.json",
   "requires": [],
-  "chance": 0
+  "chance": 12
 }
