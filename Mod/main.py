@@ -84,4 +84,4 @@ def upgradeClick(data):
     return data
 
 def upgradeAvail(data):
-    return data.upgrade_points > BigNumber(0)
+    return data.upgrade_points >= BigNumber(1)
