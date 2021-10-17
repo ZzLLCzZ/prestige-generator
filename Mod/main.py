@@ -6,18 +6,18 @@ class Data:
     def __init__(self, id):
         self.id = id
         self.level = 0
-        self.current = BigNumber(0)
+        self.current = 0
         self.goal = 1000.0
-        self.progress = BigNumber(0)
-        self.p_currency = BigNumber(0)
-        self.upgrade_points = BigNumber(0)
+        self.progress = 0
+        self.p_currency = 0
+        self.upgrade_points = 0
 
     def updateProgress(self):
-        self.progress = self.current / BigNumber(self.goal)
+        self.progress = self.current / self.goal
         if self.level >= 15.0:
-            self.progress = BigNumber(1)
-        self.prestige_currency = str(self.p_currency)
-        self.up_points = "UP:" + str(self.upgrade_points)
+            self.progress = 1
+        self.prestige_currency = str(BigNumber(self.p_currency))
+        self.up_points = "UP:" + str(BigNumber(self.upgrade_points))
 
 
 def onLoad():
@@ -33,16 +33,16 @@ def createModule(id):
     return data
 
 def tick(data):
-    data.current += BigNumber(1) 
+    data.current += 1 
     data.updateProgress()
 
     return data
 
 def bulkTick(data, amount):
     data.current += amount
-    while data.current > BigNumber(data.goal):
-        data.p_currency += BigNumber(data.level)
-        data.current -= BigNumber(data.goal)
+    while data.current > data.goal:
+        data.p_currency += data.level
+        data.current -= data.goal
     data.updateProgress()
 
     return data
@@ -51,7 +51,7 @@ def destroyModule(data):
     return data
 
 def onPrestige(data):
-    data.upgrade_points += BigNumber(1)
+    data.upgrade_points += 1
 
     return data
 
@@ -84,4 +84,4 @@ def upgradeClick(data):
     return data
 
 def upgradeAvail(data):
-    return data.upgrade_points >= BigNumber(1)
+    return data.upgrade_points >= 1
