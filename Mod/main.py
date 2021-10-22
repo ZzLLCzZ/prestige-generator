@@ -6,16 +6,16 @@ class Data:
     def __init__(self, id):
         self.id = id
         self.level = 0
-        self.current = 0
+        self.current = BigNumber(0)
         self.goal = 1000.0
-        self.progress = 0
+        self.progress = BigNumber(0)
         self.p_currency = 0
         self.upgrade_points = 0
 
     def updateProgress(self):
-        self.progress = self.current / self.goal
+        self.progress = self.current / BigNumber(self.goal)
         if self.level >= 15.0:
-            self.progress = 1
+            self.progress = BigNumber(1)
         self.prestige_currency = str(BigNumber(self.p_currency))
         self.up_points = "UP:" + str(BigNumber(self.upgrade_points))
 
@@ -33,16 +33,16 @@ def createModule(id):
     return data
 
 def tick(data):
-    data.current += 1 
+    data.current += BigNumber(1)
     data.updateProgress()
 
     return data
 
 def bulkTick(data, amount):
     data.current += amount
-    while data.current > data.goal:
+    while data.current > BigNumber(data.goal):
         data.p_currency += data.level
-        data.current -= data.goal
+        data.current -= BigNumber(data.goal)
     data.updateProgress()
 
     return data
